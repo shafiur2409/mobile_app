@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1076007016025",
+    "project_id": "jargon-lens-5fa38",
+    "storage_bucket": "jargon-lens-5fa38.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1076007016025:android:7fed6bc5e77cd721a1c348",
+        "android_client_info": {
+          "package_name": "com.jargonlens.myapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCF3VNQVxSn6S-nhpBgmB-jVxW4lRpDIHg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

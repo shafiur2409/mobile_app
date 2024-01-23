@@ -1,16 +1,14 @@
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import 'package:image_picker/image_picker.dart';
-
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'dart:async';
+import 'camera.dart';
+import 'upload.dart';
 
 void main() {
   runApp(const MaterialApp(
-    home: JargonLensHomePage(),
-    debugShowCheckedModeBanner: false,
-  ));
+      home: JargonLensHomePage(), debugShowCheckedModeBanner: false));
 }
 
 class JargonLensHomePage extends StatelessWidget {
@@ -20,43 +18,55 @@ class JargonLensHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Jargon Lens'),
+        title: const Text(
+          'Jargon Lens',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         centerTitle: true,
         backgroundColor: Colors.black,
       ),
-      body: 
-         Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(height: 200,),
-           const Image(width: 250,height: 250,
-              image: NetworkImage(
-                'https://cdn-icons-png.flaticon.com/128/3898/3898082.png',
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const SizedBox(
+            height: 150,
+          ),
+          const Image(
+            width: 300,
+            height: 300,
+            image: NetworkImage(
+              'https://cdn-icons-png.flaticon.com/128/3898/3898082.png',
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.fromLTRB(50, 0, 50, 0),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 50),
+              ),
+              child: const Text(
+                'Get Started',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.white,
+                ),
               ),
             ),
-            Container(
-              margin: EdgeInsets.fromLTRB(50,10,50,10),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
-                  );
-                },
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.black,
-                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
-                ),
-                child: Text(
-                  'GET STARTED',
-                  style: TextStyle(fontSize: 20.0),
-                ),
-              ),
-            ),
-          ],
-        ),
-      )
-    ;
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -71,6 +81,8 @@ class AuthService {
 }
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -93,30 +105,62 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        foregroundColor: Colors.white,
+        title: const Text(
+          'Welcome to Jargon Lens',
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: Colors.black,
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            const SizedBox(
+              height: 80,
+            ),
+            Text(
+              'Login',
+              style: GoogleFonts.courgette(
+                color: Colors.black,
+                fontSize: 40,
+              ),
+            ),
+            const SizedBox(
+              height: 40,
+            ),
             TextField(
+              style: GoogleFonts.philosopher(
+                  color: Colors.black, fontWeight: FontWeight.w300),
               controller: _usernameController,
-              decoration: InputDecoration(icon:Icon(Icons.man_4,color: Colors.black,),
+              decoration: InputDecoration(
+                icon: Icon(
+                  MdiIcons.account,
+                  color: Colors.black,
+                  size: 27,
+                ),
                 labelText: 'Username',
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 25),
             TextField(
               controller: _passwordController,
               obscureText: true,
-              decoration: InputDecoration(icon:Icon(Icons.password_sharp,color: Colors.black,),
+              decoration: const InputDecoration(
+                icon: Icon(
+                  Icons.password,
+                  color: Colors.black,
+                ),
                 labelText: 'Password',
               ),
             ),
-            SizedBox(height: 24.0),
-            ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: Colors.black,padding:  EdgeInsets.fromLTRB(50,10,50,10),),
+            const SizedBox(height: 50),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                padding: const EdgeInsets.fromLTRB(50, 10, 50, 10),
+              ),
               onPressed: () async {
                 String enteredUsername = _usernameController.text;
                 String enteredPassword = _passwordController.text;
@@ -126,9 +170,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     await authService.login(enteredUsername, enteredPassword);
 
                 if (isAuthenticated) {
+                  // ignore: use_build_context_synchronously
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
+                    MaterialPageRoute(builder: (context) => const HomeScreen()),
                   );
                 } else {
                   setState(() {
@@ -136,32 +181,56 @@ class _LoginScreenState extends State<LoginScreen> {
                   });
                 }
               },
-              child: Text('Login',style: GoogleFonts.lato(fontSize: 12),),
+              child: Text(
+                'Login',
+                style:
+                    GoogleFonts.philosopher(fontSize: 17, color: Colors.white),
+              ),
             ),
             if (isLoginFailed)
-              Padding(
-                padding: EdgeInsets.only(top: 16.0),
-                child: Text(
-                  'Invalid username or password',
-                  style: TextStyle(color: Colors.red),
-                ),
+              const AlertDialog(
+                title: Text('Alert!'),
               ),
-            SizedBox(height: 16.0),
-            ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: Colors.black,padding:  EdgeInsets.fromLTRB(50,10,50,10),),
-              onPressed: _handleSignIn
-              ,
-              child: Text('Sign Up with Google'),
-            ),
-            TextButton(onPressed:(){ Navigator.push(
+            const SizedBox(height: 30),
+            ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  padding: const EdgeInsets.fromLTRB(50, 10, 50, 10),
+                ),
+                onPressed: _handleSignIn,
+                icon: Icon(
+                  MdiIcons.google,
+                  color: Colors.white,
+                ),
+                label: Text(
+                  'Sign Up with Google',
+                  style: GoogleFonts.philosopher(
+                    color: Colors.white,
+                    fontSize: 17,
+                  ),
+                )),
+            const SizedBox(height: 20),
+            TextButton(
+                onPressed: () {
+                  Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SignUP()),
-                  );},child: Text('Sign Up ?',style: GoogleFonts.lato(fontSize: 20,color: Colors.black),)),
+                    MaterialPageRoute(builder: (context) => const SignUP()),
+                  );
+                },
+                child: Text(
+                  'Don\'t have a account ? Sign Up',
+                  style: GoogleFonts.philosopher(
+                      fontSize: 20,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500),
+                )),
           ],
         ),
       ),
     );
   }
 }
+
 class SignUP extends StatefulWidget {
   const SignUP({super.key});
 
@@ -170,80 +239,148 @@ class SignUP extends StatefulWidget {
 }
 
 class _SignUPState extends State<SignUP> {
-   final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  
+
   bool isLoginFailed = false;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(
-        title: Text('Welcome to Jargon Lens'),
-        backgroundColor: Colors.black,
-      ),body:  Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [SizedBox(height: 100,),
-            TextField(
-              controller: _usernameController,
-              decoration: InputDecoration(icon:Icon(Icons.man_4,color: Colors.black,),
-                labelText: 'Username',
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('Welcome to Jargon Lens'),
+          backgroundColor: Colors.black,
+        ),
+        body: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+          const SizedBox(
+            height: 100,
+          ),
+          TextField(
+            controller: _usernameController,
+            decoration: InputDecoration(
+              icon: Icon(
+                MdiIcons.account,
+                color: Colors.black,
               ),
+              labelText: 'Username',
             ),
-            SizedBox(height: 20),
-            TextField(
-              controller: _emailController,
-              obscureText: true,
-              decoration: InputDecoration(icon:Icon(Icons.mail_lock,color: Colors.black,),
-                labelText: 'Email ID',
+          ),
+          const SizedBox(height: 20),
+          TextField(
+            controller: _emailController,
+            obscureText: true,
+            decoration: const InputDecoration(
+              icon: Icon(
+                Icons.mail_lock,
+                color: Colors.black,
               ),
+              labelText: 'Email ID',
             ),
-            SizedBox(height: 20),
-            TextField(
-              controller: _phoneController,
-              obscureText: true,
-              decoration: InputDecoration(icon:Icon(Icons.phone,color: Colors.black,),
-                labelText: 'Phone Number',
+          ),
+          const SizedBox(height: 20),
+          TextField(
+            controller: _phoneController,
+            obscureText: true,
+            decoration: const InputDecoration(
+              icon: Icon(
+                Icons.phone,
+                color: Colors.black,
               ),
+              labelText: 'Phone Number',
             ),
-            SizedBox(height: 20),
-            TextField(
-              controller: _passwordController,
-              obscureText: true,
-              decoration: InputDecoration(icon:Icon(Icons.password_sharp,color: Colors.black,),
-                labelText: 'Password',
+          ),
+          const SizedBox(height: 20),
+          TextField(
+            controller: _passwordController,
+            obscureText: true,
+            decoration: const InputDecoration(
+              icon: Icon(
+                Icons.password_sharp,
+                color: Colors.black,
               ),
+              labelText: 'Password',
             ),
-            SizedBox(height: 30),
-            ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: Colors.black,padding:  EdgeInsets.fromLTRB(50,10,50,10),),
-              onPressed:() {Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
-                  );}
-              ,
-              child: Text('Register',style: GoogleFonts.lato(fontSize:20),),
-            )
-            ]));
+          ),
+          const SizedBox(height: 30),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.black,
+              padding: const EdgeInsets.fromLTRB(50, 10, 50, 10),
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HomeScreen()),
+              );
+            },
+            child: Text(
+              'Register',
+              style: GoogleFonts.lato(fontSize: 20),
+            ),
+          )
+        ]));
   }
 }
+
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
+        title: const Text('Home'),
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+        actions: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.settings)),
+        ],
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Welcome to the Home Screen!'),
-            SizedBox(height: 16.0),
-            ElevatedButton(
+            ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                padding: const EdgeInsets.fromLTRB(50, 10, 50, 10),
+              ),
               onPressed: () {
-                
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Scanner()),
+                );
               },
-              child: Text('Go to QR Code and Image'),
+              icon: Icon(
+                MdiIcons.camera,
+                color: Colors.white,
+              ),
+              label: Text(
+                'Scanner',
+                style: GoogleFonts.lato(fontSize: 20, color: Colors.white),
+              ),
+            ),
+            const SizedBox(height: 16.0),
+            ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                padding: const EdgeInsets.fromLTRB(50, 10, 50, 10),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Upload()),
+                );
+              },
+              icon: Icon(
+                MdiIcons.upload,
+                color: Colors.white,
+              ),
+              label: Text(
+                'Upload ',
+                style: GoogleFonts.lato(fontSize: 20, color: Colors.white),
+              ),
             ),
           ],
         ),
@@ -254,6 +391,8 @@ class HomeScreen extends StatelessWidget {
 
 class SignUpWithGoogleScreen extends StatelessWidget {
   final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
+
+  SignUpWithGoogleScreen({super.key});
 
   Future<void> _handleSignIn() async {
     try {
@@ -267,7 +406,7 @@ class SignUpWithGoogleScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sign Up with Google'),
+        title: const Text('Sign Up with Google'),
       ),
       body: Center(
         child: Column(
@@ -275,7 +414,7 @@ class SignUpWithGoogleScreen extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: _handleSignIn,
-              child: Text('Sign Up with Google'),
+              child: const Text('Sign Up with Google'),
             ),
           ],
         ),
